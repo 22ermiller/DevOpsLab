@@ -50,10 +50,6 @@ from vetiver import vetiver_pin_write
 model_board = board_folder("data/model", allow_pickle_read = True)
 vetiver_pin_write(model_board, v)
 
-app = VetiverAPI(v, check_prototype = True)
-app.run(port = 8080)
-
-print(v.prototype_data.head())
 ```
 
 ## Get some information
