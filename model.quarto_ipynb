@@ -11,7 +11,7 @@
         "    code-fold: true\n",
         "---"
       ],
-      "id": "17101ba6"
+      "id": "183c23c1"
     },
     {
       "cell_type": "code",
@@ -24,7 +24,7 @@
         "from sklearn import preprocessing\n",
         "import duckdb"
       ],
-      "id": "58725c37",
+      "id": "bcb65454",
       "execution_count": null,
       "outputs": []
     },
@@ -34,7 +34,7 @@
       "source": [
         "## Get Data\n"
       ],
-      "id": "27e3eab3"
+      "id": "60964e78"
     },
     {
       "cell_type": "code",
@@ -46,7 +46,7 @@
         "\n",
         "df.head(3)"
       ],
-      "id": "5eb6041e",
+      "id": "f737947c",
       "execution_count": null,
       "outputs": []
     },
@@ -56,7 +56,7 @@
       "source": [
         "## Define Model and Fit\n"
       ],
-      "id": "62e00097"
+      "id": "99724f8a"
     },
     {
       "cell_type": "code",
@@ -67,7 +67,7 @@
         "\n",
         "model = LinearRegression().fit(X, y)"
       ],
-      "id": "b9c230fc",
+      "id": "ea078823",
       "execution_count": null,
       "outputs": []
     },
@@ -77,7 +77,7 @@
       "source": [
         "## Turn into Vetiver Model\n"
       ],
-      "id": "4c851c3e"
+      "id": "ede9492f"
     },
     {
       "cell_type": "code",
@@ -86,7 +86,7 @@
         "from vetiver import VetiverModel, VetiverAPI\n",
         "v = VetiverModel(model, model_name='penguin_model', prototype_data=X)"
       ],
-      "id": "a2785b2d",
+      "id": "490c1a77",
       "execution_count": null,
       "outputs": []
     },
@@ -96,7 +96,7 @@
       "source": [
         "## Save to Board\n"
       ],
-      "id": "54a9c164"
+      "id": "ff81bbf3"
     },
     {
       "cell_type": "code",
@@ -108,7 +108,7 @@
         "model_board = board_folder(\"data/model\", allow_pickle_read = True)\n",
         "vetiver_pin_write(model_board, v)"
       ],
-      "id": "536a480a",
+      "id": "a21141ce",
       "execution_count": null,
       "outputs": []
     },
@@ -118,7 +118,7 @@
       "source": [
         "## Get some information\n"
       ],
-      "id": "ba693066"
+      "id": "67bfbb01"
     },
     {
       "cell_type": "code",
@@ -129,7 +129,7 @@
         "print(f\"Columns {X.columns}\")\n",
         "print(f\"Coefficients {model.coef_}\")"
       ],
-      "id": "27119840",
+      "id": "83613e68",
       "execution_count": null,
       "outputs": []
     }
