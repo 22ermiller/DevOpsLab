@@ -1,0 +1,30 @@
+---
+title: "R Model"
+format:
+  html:
+    code-fold: true
+---
+
+```{r}
+library(dplyr)
+library(DBI)
+library(dbplyr)
+library(plumber)
+
+con <- DBI::dbConnect(
+  duckdb::duckdb(), 
+  dbdir = "my-db.duckdb"
+  )
+df <- dplyr::tbl(con, "penguins")
+```
+
+## Implement Model
+
+```{r}
+df_collected <- df %>% collect()
+
+penguins.lm <- lm(body_mass_g ~ bill_length_mm + species + sex, data = df_collected)
+
+saveRDS(penguins.lm, "penguins_model.rds")
+
+```
