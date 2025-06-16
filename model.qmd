@@ -38,7 +38,7 @@ model = LinearRegression().fit(X, y)
 
 ```{python}
 from vetiver import VetiverModel, VetiverAPI
-v = VetiverModel(model, model_name='penguin_model', prototype_data=X)
+#v = VetiverModel(model, model_name='penguin_model', prototype_data=X)
 ```
 
 ## Save to Board
@@ -47,8 +47,8 @@ v = VetiverModel(model, model_name='penguin_model', prototype_data=X)
 from pins import board_folder
 from vetiver import vetiver_pin_write
 
-model_board = board_folder("data/model", allow_pickle_read = True)
-vetiver_pin_write(model_board, v)
+#model_board = board_folder("data/model", allow_pickle_read = True)
+#vetiver_pin_write(model_board, v)
 
 ```
 
