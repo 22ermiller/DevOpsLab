@@ -1,0 +1,65 @@
+[
+  {
+    "objectID": "rmodel.html",
+    "href": "rmodel.html",
+    "title": "R Model",
+    "section": "",
+    "text": "Code\nlibrary(dplyr)\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nCode\nlibrary(DBI)\nlibrary(dbplyr)\n\n\n\nAttaching package: 'dbplyr'\n\n\nThe following objects are masked from 'package:dplyr':\n\n    ident, sql\n\n\nCode\nlibrary(plumber)\n\ncon &lt;- DBI::dbConnect(\n  duckdb::duckdb(), \n  dbdir = \"my-db.duckdb\"\n  )\ndf &lt;- dplyr::tbl(con, \"penguins\")"
+  },
+  {
+    "objectID": "rmodel.html#implement-model",
+    "href": "rmodel.html#implement-model",
+    "title": "R Model",
+    "section": "Implement Model",
+    "text": "Implement Model\n\n\nCode\ndf_collected &lt;- df %&gt;% collect()\n\npenguins.lm &lt;- lm(body_mass_g ~ bill_length_mm + species + sex, data = df_collected)\n\nsaveRDS(penguins.lm, \"penguins_model.rds\")"
+  },
+  {
+    "objectID": "model.html",
+    "href": "model.html",
+    "title": "Model",
+    "section": "",
+    "text": "Code\nfrom palmerpenguins import penguins\nfrom pandas import get_dummies\nimport numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn import preprocessing\nimport duckdb"
+  },
+  {
+    "objectID": "model.html#get-data",
+    "href": "model.html#get-data",
+    "title": "Model",
+    "section": "Get Data",
+    "text": "Get Data\n\n\nCode\ncon = duckdb.connect('my-db.duckdb')\ndf = con.execute(\"SELECT * FROM penguins\").fetchdf().dropna()\ncon.close()\n\ndf.head(3)\n\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181\n3750\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186\n3800\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195\n3250\nfemale\n2007"
+  },
+  {
+    "objectID": "model.html#define-model-and-fit",
+    "href": "model.html#define-model-and-fit",
+    "title": "Model",
+    "section": "Define Model and Fit",
+    "text": "Define Model and Fit\n\n\nCode\nX = get_dummies(df[['bill_length_mm', 'species', 'sex']], drop_first = True)\ny = df['body_mass_g']\n\nmodel = LinearRegression().fit(X, y)"
+  },
+  {
+    "objectID": "model.html#turn-into-vetiver-model",
+    "href": "model.html#turn-into-vetiver-model",
+    "title": "Model",
+    "section": "Turn into Vetiver Model",
+    "text": "Turn into Vetiver Model\n\n\nCode\nfrom vetiver import VetiverModel, VetiverAPI\n#v = VetiverModel(model, model_name='penguin_model', prototype_data=X)"
+  },
+  {
+    "objectID": "model.html#save-to-board",
+    "href": "model.html#save-to-board",
+    "title": "Model",
+    "section": "Save to Board",
+    "text": "Save to Board\n\n\nCode\nfrom pins import board_folder\nfrom vetiver import vetiver_pin_write\n\n#model_board = board_folder(\"data/model\", allow_pickle_read = True)\n#vetiver_pin_write(model_board, v)"
+  },
+  {
+    "objectID": "model.html#get-some-information",
+    "href": "model.html#get-some-information",
+    "title": "Model",
+    "section": "Get some information",
+    "text": "Get some information\n\n\nCode\nprint(f\"R^2 {model.score(X,y)}\")\nprint(f\"Intercept {model.intercept_}\")\nprint(f\"Columns {X.columns}\")\nprint(f\"Coefficients {model.coef_}\")\n\n\nR^2 0.8555368759537614\nIntercept 2169.2697209393996\nColumns Index(['bill_length_mm', 'species_Chinstrap', 'species_Gentoo', 'sex_male'], dtype='object')\nCoefficients [  32.53688677 -298.76553447 1094.86739145  547.36692408]"
+  },
+  {
+    "objectID": "eda.html",
+    "href": "eda.html",
+    "title": "Untitled",
+    "section": "",
+    "text": "library(palmerpenguins)\n\n\nAttaching package: 'palmerpenguins'\n\n\nThe following objects are masked from 'package:datasets':\n\n    penguins, penguins_raw\n\nlibrary(dplyr)\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\nlibrary(ggplot2)\nlibrary(DBI)\nlibrary(dbplyr)\n\n\nAttaching package: 'dbplyr'\n\n\nThe following objects are masked from 'package:dplyr':\n\n    ident, sql\n\ncon &lt;- DBI::dbConnect(\n  duckdb::duckdb(), \n  dbdir = \"my-db.duckdb\"\n  )\ndf &lt;- dplyr::tbl(con, \"penguins\")\n\ndf |&gt; \n    count(species)\n\n# Source:   SQL [?? x 2]\n# Database: DuckDB v1.3.0 [millerer22@Linux 6.8.0-60-generic:R 4.5.0//home/millerer22/Documents/Work/DevOpsLab/my-db.duckdb]\n  species       n\n  &lt;fct&gt;     &lt;dbl&gt;\n1 Adelie      152\n2 Chinstrap    68\n3 Gentoo      124\n\ndf |&gt; \n    count(island)\n\n# Source:   SQL [?? x 2]\n# Database: DuckDB v1.3.0 [millerer22@Linux 6.8.0-60-generic:R 4.5.0//home/millerer22/Documents/Work/DevOpsLab/my-db.duckdb]\n  island        n\n  &lt;fct&gt;     &lt;dbl&gt;\n1 Biscoe      168\n2 Dream       124\n3 Torgersen    52\n\n\n\nmass_flipper &lt;- ggplot(data = df, \n                       aes(x = flipper_length_mm,\n                           y = body_mass_g)) +\n  geom_point(aes(color = species, \n                 shape = species),\n             size = 3,\n             alpha = 0.8) +\n  scale_color_manual(values = c(\"darkorange\",\"purple\",\"cyan4\")) +\n  labs(title = \"Penguin size, Palmer Station LTER\",\n       subtitle = \"Flipper length and body mass for Adelie, Chinstrap and Gentoo Penguins\",\n       x = \"Flipper length (mm)\",\n       y = \"Body mass (g)\",\n       color = \"Penguin species\",\n       shape = \"Penguin species\") +\n  theme(legend.position = c(0.2, 0.7),\n        plot.title.position = \"plot\",\n        plot.caption = element_text(hjust = 0, face= \"italic\"),\n        plot.caption.position = \"plot\")\n\nWarning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2\n3.5.0.\nℹ Please use the `legend.position.inside` argument of `theme()` instead.\n\nmass_flipper\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\n\n\n\n\n\n\nDBI::dbDisconnect(con)"
+  }
+]
